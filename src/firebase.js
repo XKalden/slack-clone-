@@ -13,7 +13,8 @@ var config = {
     storageBucket: "react-slace-clone.appspot.com",
     messagingSenderId: "468076575741"
   };
-  firebase.initializeApp(config);
+
+firebase.initializeApp(config);
 
 
-  export default firebase;
+export default firebase;

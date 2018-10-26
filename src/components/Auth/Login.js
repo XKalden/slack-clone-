@@ -28,24 +28,40 @@ class Login extends Component {
     });
   };
 
-  // display error message
-  displayErrors = errors => errors.map((error, i) => <p key={i}>{error.message}</p>);
 
 
   handleSubmit = event => {
     event.preventDefault();
-    if (this.isFormValid()) {
+    if (this.isFormValid(this.state)) {
       this.setState({errors: [], loading: true});
+
+      //make conneciton to firebase
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.state.email, this.state.password)
+        .then(signedInUser => {
+          console.log(signedInUser);
+        })
+        .catch(err => {
+          this.setState({ 
+            errors: this.state.errors.concat(err),
+            loading: false 
+          });
+        });
      
     }
   };
+
+  isFormValid = ({email, password}) => email && password;
 
   handleInputError = (errors, type) => {
     return errors.some(err => err.message.toLowerCase().includes(type))
       ? 'error'
       : '';
-
   }
+
+  // display error message
+  displayErrors = errors => errors.map((error, i) => <p key={i}>{error.message}</p>);
 
   render() {
     const {
@@ -68,17 +84,7 @@ class Login extends Component {
 
           <Form onSubmit={this.handleSubmit} size="large">
             <Segment stacked>
-              <Form.Input
-                fluid
-                name="username"
-                icon="user"
-                iconPosition="left"
-                placeholder="Username"
-                onChange={this.handleChange}
-                type="text"
-                value={username}
-                className={this.handleInputError(errors, 'username')}/>
-
+      
               <Form.Input
                 fluid
                 name="email"
@@ -100,24 +106,13 @@ class Login extends Component {
                 type="password"
                 value={password}
                 className={this.handleInputError(errors, 'password')}/>
-
-              <Form.Input
-                fluid
-                name="passwordConfirmation"
-                icon="repeat"
-                iconPosition="left"
-                placeholder="Password Confirmation"
-                onChange={this.handleChange}
-                type="password"
-                value={passwordConfirmation}
-                className={this.handleInputError(errors, 'password')}/>
-
+      
               <Button
                 disabled={loading}
                 className={loading
                 ? 'loading'
                 : ''}
-                color="orange"
+                color="violet"
                 fluid
                 size="large">Submit</Button>
 
@@ -135,8 +130,8 @@ class Login extends Component {
 
           )}
 
-          <Message>Already user?
-            <Link to="/login">Login</Link>
+          <Message>
+            Don't have an account? <Link to="/register">Register</Link>
           </Message>
 
         </Grid.Column>
