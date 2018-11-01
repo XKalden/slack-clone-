@@ -94,7 +94,6 @@ class Channels extends React.Component {
     }
 
 
-
     //  Find all the list of channel from data base
     componentDidMount(){
         this.addListeners();
@@ -110,11 +109,6 @@ class Channels extends React.Component {
         this.state.channelsRef.off();
 
     }
-
-
-
-    
-
 
     // Get Channels data from fire base 
 
@@ -160,11 +154,9 @@ class Channels extends React.Component {
     render(){
         const { channels, modal } = this.state;
 
-
         return(
-
             <React.Fragment>
-            <Menu.Menu style={{paddingBottom: '2em'}}>
+            <Menu.Menu className="menu">
                 <Menu.Item>
                     <span>
                         <Icon name="exchange" /> CHANNELS
